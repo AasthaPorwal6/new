@@ -32,10 +32,17 @@ productName: { type: String, required: true },
 productQuantity: { type: Number, required: true },
 productPrice: { type: Number, required: true },
 });
+//pharmacy schema
+const pharmacySchema = new mongoose.Schema({
+    productId: { type: String, required: true },
+    productName: { type: String, required: true },
+    productQuantity: { type: Number, required: true },
+    productPrice: { type: Number, required: true },
+    });
 //product general
 const Product = mongoose.model("Product", productSchema);
 //product pharmacy
-const Product_pharmacy = mongoose.model("Product_pharmacy", productSchema);
+const PharmacyProduct = mongoose.model("PharmacyProduct", pharmacySchema);
 //product stationery
 const Product_stationery = mongoose.model("Product_stationery", productSchema);
 
@@ -169,16 +176,16 @@ res.status(200).send(products);
 });
 
 // Create a product_pharmacys
-server.post("/api/product_pharmacys", (req, res) => {
+server.post("/api/PharmacyProducts", (req, res) => {
     console.log("req", req);
-    const product_pharmacys = new Product_pharmacy({
+    const pharmacyProduct = new PharmacyProduct({
     productId: req.body.id,
     productName: req.body.name,
     productQuantity: req.body.quantity,
     productPrice: req.body.price,
     });
     
-    product_pharmacys.save((err) => {
+    pharmacyProduct.save((err) => {
     if (err) {
     console.error(err);
     res.status(500).send("Error adding product!");
@@ -189,10 +196,10 @@ server.post("/api/product_pharmacys", (req, res) => {
     });
 
     // Update a product_pharmacys
-server.put("/api/product_pharmacys/:id", (req, res) => {
+server.put("/api/PharmacyProducts/:id", (req, res) => {
 const id = req.params.id;
 
-Product_pharmacy.findOneAndUpdate(
+PharmacyProduct.findOneAndUpdate(
 { id },
 {
 name: req.body.name,
@@ -209,31 +216,12 @@ res.send("Product updated successfully!");
 }
 );
 });
-server.put("/api/product_pharmacys/:id", (req, res) => {
-    const id = req.params.id;
-    
-    Product.findOneAndUpdate(
-    { id },
-    {
-    name: req.body.name,
-    quantity: req.body.quantity,
-    price: req.body.price,
-    },
-    (err) => {
-    if (err) {
-    console.error(err);
-    res.status(500).send("Error updating product!");
-    } else {
-    res.send("Product updated successfully!");
-    }
-    }
-    );
-    });
+
     // Delete a product_pharmacys
-server.delete("/api/product_pharmacys/:id", (req, res) => {
+server.delete("/api/pharmacyProducts/:id", (req, res) => {
     const id = req.params.id;
     
-    Product_pharmacy.deleteOne({ id }, (err) => {
+    PharmacyProduct.deleteOne({ id }, (err) => {
     if (err) {
     console.error(err);
     res.status(500).send("Error deleting product!");
@@ -244,87 +232,87 @@ server.delete("/api/product_pharmacys/:id", (req, res) => {
     });
     
     // Get all product_pharmacys
-    server.get("/api/all-products", (req, res) => {
-        Product_pharmacy.find({}, (err, product_pharmacys) => {
+    server.get("/api/all-PharmacyProducts", (req, res) => {
+        PharmacyProduct.find({}, (err, pharmacyProducts) => {
     if (err) {
     res.status(500).send(err);
     } else {
-    res.status(200).send(product_pharmacys);
+    res.status(200).send(pharmacyProducts);
     }
     });
     });
 
 
 
-    // Create a product_stationery
-server.post("/api/product_stationerys", (req, res) => {
-    console.log("req", req);
-    const product_stationery = new Product({
-    productId: req.body.id,
-    productName: req.body.name,
-    productQuantity: req.body.quantity,
-    productPrice: req.body.price,
-    });
+//     // Create a product_stationery
+// server.post("/api/product_stationerys", (req, res) => {
+//     console.log("req", req);
+//     const product_stationery = new Product({
+//     productId: req.body.id,
+//     productName: req.body.name,
+//     productQuantity: req.body.quantity,
+//     productPrice: req.body.price,
+//     });
     
-    product_stationerys.save((err) => {
-    if (err) {
-    console.error(err);
-    res.status(500).send("Error adding product!");
-    } else {
-    res.send("Product added successfully!");
-    }
-    });
-    });
-    
-    
-    
-    // Update a product
-    server.put("/api/product_stationerys/:id", (req, res) => {
-    const id = req.params.id;
-    
-    Product_stationery.findOneAndUpdate(
-    { id },
-    {
-    name: req.body.name,
-    quantity: req.body.quantity,
-    price: req.body.price,
-    },
-    (err) => {
-    if (err) {
-    console.error(err);
-    res.status(500).send("Error updating product!");
-    } else {
-    res.send("Product updated successfully!");
-    }
-    }
-    );
-    });
+//     product_stationerys.save((err) => {
+//     if (err) {
+//     console.error(err);
+//     res.status(500).send("Error adding product!");
+//     } else {
+//     res.send("Product added successfully!");
+//     }
+//     });
+//     });
     
     
-    // Delete a products
-    server.delete("/api/product_stationerys/:id", (req, res) => {
-    const id = req.params.id;
     
-    Product.deleteOne({ id }, (err) => {
-    if (err) {
-    console.error(err);
-    res.status(500).send("Error deleting product!");
-    } else {
-    res.send("Product deleted successfully!");
-    }
-    });
-    });
+//     // Update a product
+//     server.put("/api/product_stationerys/:id", (req, res) => {
+//     const id = req.params.id;
     
-    // Get all products
-    server.get("/api/all-product_stationerys", (req, res) => {
-    Product.find({}, (err, product_stationerys) => {
-    if (err) {
-    res.status(500).send(err);
-    } else {
-    res.status(200).send(product_stationerys);
-    }
-    });
-    });
+//     Product_stationery.findOneAndUpdate(
+//     { id },
+//     {
+//     name: req.body.name,
+//     quantity: req.body.quantity,
+//     price: req.body.price,
+//     },
+//     (err) => {
+//     if (err) {
+//     console.error(err);
+//     res.status(500).send("Error updating product!");
+//     } else {
+//     res.send("Product updated successfully!");
+//     }
+//     }
+//     );
+//     });
+    
+    
+//     // Delete a products
+//     server.delete("/api/product_stationerys/:id", (req, res) => {
+//     const id = req.params.id;
+    
+//     Product.deleteOne({ id }, (err) => {
+//     if (err) {
+//     console.error(err);
+//     res.status(500).send("Error deleting product!");
+//     } else {
+//     res.send("Product deleted successfully!");
+//     }
+//     });
+//     });
+    
+//     // Get all products
+//     server.get("/api/all-product_stationerys", (req, res) => {
+//     Product.find({}, (err, product_stationerys) => {
+//     if (err) {
+//     res.status(500).send(err);
+//     } else {
+//     res.status(200).send(product_stationerys);
+//     }
+//     });
+//     });
     
 
 server.listen(9002, () => {
